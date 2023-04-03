@@ -34,8 +34,14 @@ app.use(session({
     resave: false,
     store: store
 }))
+app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Method", "GET,PUT,POST,PATCH,DELETE,OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    next();
+})
 app.use(bodyParser.json());
 app.use(router);
 
-mongoose.connect(MONGO_URI  )
+mongoose.connect(MONGO_URI)
     .then(app.listen(3434)) 

@@ -5,6 +5,7 @@ const multer = require('multer');
 const path = require('path');
 const session = require('express-session');
 const Store = require('connect-mongodb-session')(session);
+const cookieParser = require('cookie-parser');
 
 const router = require('./routes/router');
 
@@ -40,6 +41,7 @@ app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
     next();
 })
+app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(router);
 

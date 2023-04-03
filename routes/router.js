@@ -36,7 +36,7 @@ router.post('/creation', [
     body('city').notEmpty().withMessage('City is required'),
     body('pin')
         .notEmpty().withMessage('PIN code is required')
-        .isPostalCode().withMessage('PIN code must be a valid postal code')
+        .isPostalCode('IN').withMessage('PIN code must be a valid postal code')
 ], loginController.creation);
 
 router.post('/success', [

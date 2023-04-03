@@ -1,6 +1,6 @@
 const nodemailer = require('nodemailer');
 const { validationResult } = require('express-validator');
-
+const jwt = require('jsonwebtoken');
 const User = require('../model/user');
 
 exports.signIn = (req, res, next) => {
@@ -8,7 +8,12 @@ exports.signIn = (req, res, next) => {
     User.findOne({ $and: [{ userName: userName }, { password: password }] })
         .then(result => {
             if (result != null) {
-                res.status(200).json({ message: 'logged in successfully!' });
+                const token = jwt.sign(
+                    { emailId: result.emailId },
+                    "thisIsSecrect",
+                    { expiresIn: '1d' }
+                );
+                res.status(200).json({ message: 'logged in successfully!', token: token, user: result });
             }
             else {
                 res.status(404).json({ message: 'invalid credentials' });
@@ -16,7 +21,8 @@ exports.signIn = (req, res, next) => {
         })
 }
 
-var otpMailed = String(Math.floor((Math.random() * 10000) + 1));
+var otpMailed = String(Math.floor((Math.random() * 1000000) + 1));
+console.log(otpMailed);
 
 exports.identification = async (req, res, next) => {
     const { accountType, contactNumber, emailId } = req.body;

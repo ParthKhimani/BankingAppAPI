@@ -96,11 +96,13 @@ exports.creation = (req, res, next) => {
 }
 
 exports.success = (req, res, next) => {
-    const { userId, password, confirmPassword } = req.body;
+    const { userId, password, confirmPassword, wpAlert, emailAlert } = req.body;
     User.findOneAndUpdate({ emailId: req.session.mailId }, {
         userName: userId,
         password: password,
-        confirmPassword: confirmPassword
+        confirmPassword: confirmPassword,
+        wpAlert: wpAlert,
+        emailAlert: emailAlert
     })
     res.status(200).json({ message: 'data added sucessfully!' });
 }

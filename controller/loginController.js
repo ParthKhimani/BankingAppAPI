@@ -112,7 +112,7 @@ exports.success = (req, res, next) => {
     const { userId, password, confirmPassword, wpAlert, emailAlert } = req.body;
     User.find({ userName: userId })
         .then(result => {
-            if (!result) {
+            if (result != null) {
                 User.findOneAndUpdate({ emailId: req.session.mailId }, {
                     userName: userId,
                     password: password,
@@ -126,5 +126,4 @@ exports.success = (req, res, next) => {
                 res.status(400).json({ message: 'User already registered!' });
             }
         })
-
 }

@@ -21,8 +21,11 @@ router.post('/identification', [
 
 router.post('/verification', [
     body('imagePath1').notEmpty().withMessage('Image path is required'),
-    body('imagePath2').notEmpty().withMessage('Image path is required')
 ], loginController.verification);
+
+router.post('/verificationSelfieUpload', [
+    body('imagePath2').notEmpty().withMessage('Image path is required')
+], loginController.verificationSelfieUpload);
 
 router.post('/creation', [
     body('title').notEmpty().withMessage('Title is required'),

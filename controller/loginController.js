@@ -9,7 +9,7 @@ exports.signIn = (req, res, next) => {
         .then(result => {
             if (result != null) {
                 const token = jwt.sign(
-                    { emailId: result.emailId },
+                    { userName: result.userName },
                     "thisIsSecrect",
                     { expiresIn: '1d' }
                 );
@@ -72,15 +72,22 @@ exports.verification = (req, res, next) => {
         res.status(400).json({ message: "otp doesn't matched" });
     }
     else {
-        const { imageData1, imageData2 } = req.file;
+        const { imageData1 } = req.file;
         var imageUrl1 = imageData1.path;
-        var imageUrl2 = imageData2.path;
         User.findOneAndUpdate({ emailId: req.session.mailId }, {
             imagePath1: imageUrl1,
-            imagePath2: imageUrl2
         })
         res.status(200).json({ message: 'data added sucessfully!' });
     }
+}
+
+exports.verificationSelfieUpload = (req, res, next) => {
+    const { imageData2 } = req.file;
+    var imageUrl2 = imageData2.path;
+    User.findOneAndUpdate({ emailId: req.session.mailId }, {
+        imagePath2: imageUrl2,
+    })
+    res.status(200).json({ message: 'data added sucessfully!' });
 }
 
 exports.creation = (req, res, next) => {

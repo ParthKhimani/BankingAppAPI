@@ -5,23 +5,29 @@ const User = require('../model/user');
 
 exports.signIn = (req, res, next) => {
     const { userName, password } = req.body;
-    User.findOne({ $and: [{ userName: userName }, { password: password }] })
-        .then(result => {
-            if (result != null) {
-                const token = jwt.sign(
-                    { userName: result.userName },
-                    "thisIsSecrect",
-                    { expiresIn: '1d' }
-                );
-                res.status(200).json({ message: 'logged in successfully!', token: token, user: result });
-            }
-            else {
-                res.status(404).json({ message: 'invalid credentials' });
-            }
-        })
+    const errors = validationResult(req);
+    if (errors.isEmpty()) {
+        User.findOne({ $and: [{ userName: userName }, { password: password }] })
+            .then(result => {
+                if (result != null) {
+                    const token = jwt.sign(
+                        { userName: result.userName },
+                        "thisIsSecrect",
+                        { expiresIn: '1d' }
+                    );
+                    res.status(200).json({ message: 'logged in successfully!', token: token, user: result });
+                }
+                else {
+                    res.status(404).json({ message: 'invalid credentials' });
+                }
+            })
+    }
+    else {
+        res.status(422).json({ message: errors.array()[0].msg });
+    }
 }
 
-var otpMailed = String(Math.floor((Math.random() * 1000000) + 1));
+var otpMailed = Math.floor(100000 + Math.random() * 900000).toString();
 console.log(otpMailed);
 
 exports.identification = async (req, res, next) => {
@@ -40,13 +46,13 @@ exports.identification = async (req, res, next) => {
         let mailTransporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                user: '<emailId>',
-                pass: '<appKey>'
+                user: 'parthkhimani48@gmail.com',
+                pass: 'maatulplnmgqgyio'
             }
         });
 
         let mailDetails = {
-            from: '<emailId>',
+            from: 'parthkhimani48@gmail.com',
             to: emailId,
             subject: 'OTP for verification',
             text: 'Your verification code is: ' + otpMailed
@@ -73,58 +79,82 @@ exports.verification = (req, res, next) => {
     }
     else {
         const { imageData1 } = req.file;
-        var imageUrl1 = imageData1.path;
-        User.findOneAndUpdate({ emailId: req.session.mailId }, {
-            imagePath1: imageUrl1,
-        })
-        res.status(200).json({ message: 'data added sucessfully!' });
+        const errors = validationResult(req);
+        if (errors.isEmpty()) {
+            var imageUrl1 = imageData1.path;
+            User.findOneAndUpdate({ emailId: req.session.mailId }, {
+                imagePath1: imageUrl1,
+            })
+            res.status(200).json({ message: 'data added sucessfully!' });
+        }
+        else {
+            res.status(422).json({ message: errors.array()[0].msg });
+        }
     }
 }
 
 exports.verificationSelfieUpload = (req, res, next) => {
     const { imageData2 } = req.file;
-    var imageUrl2 = imageData2.path;
-    User.findOneAndUpdate({ emailId: req.session.mailId }, {
-        imagePath2: imageUrl2,
-    })
-    res.status(200).json({ message: 'data added sucessfully!' });
+    const errors = validationResult(req);
+    if (errors.isEmpty()) {
+        var imageUrl2 = imageData2.path;
+        User.findOneAndUpdate({ emailId: req.session.mailId }, {
+            imagePath2: imageUrl2,
+        })
+        res.status(200).json({ message: 'data added sucessfully!' });
+    }
+    else {
+        res.status(422).json({ message: errors.array()[0].msg });
+    }
 }
 
 exports.creation = (req, res, next) => {
     const { title, firstName, lastName, gender, dateOfBirth, address1, address2, country, state, city, pin } = req.body;
-    User.findOneAndUpdate({ emailId: req.session.mailId }, {
-        title: title,
-        firstName: firstName,
-        lastName: lastName,
-        gender: gender,
-        dateOfBirth: dateOfBirth,
-        address1: address1,
-        address2: address2,
-        country: country,
-        state: state,
-        city: city,
-        pin: pin
-    })
-    res.status(200).json({ message: 'data added sucessfully!' });
+    const errors = validationResult(req);
+    if (errors.isEmpty()) {
+        User.findOneAndUpdate({ emailId: req.session.mailId }, {
+            title: title,
+            firstName: firstName,
+            lastName: lastName,
+            gender: gender,
+            dateOfBirth: dateOfBirth,
+            address1: address1,
+            address2: address2,
+            country: country,
+            state: state,
+            city: city,
+            pin: pin
+        })
+        res.status(200).json({ message: 'data added sucessfully!' });
+    }
+    else {
+        res.status(422).json({ message: errors.array()[0].msg });
+    }
 }
 
 exports.success = (req, res, next) => {
     const { userId, password, confirmPassword, wpAlert, emailAlert } = req.body;
-    User.findOne({ userName: userId })
-        .then(result => {
-            console.log(result);
-            if (result != null) {
-                res.status(400).json({ message: 'User already registered!' });
-            }
-            else {
-                User.findOneAndUpdate({ emailId: req.session.mailId }, {
-                    userName: userId,
-                    password: password,
-                    confirmPassword: confirmPassword,
-                    wpAlert: wpAlert,
-                    emailAlert: emailAlert
-                })
-                res.status(200).json({ message: 'data added sucessfully!' });
-            }
-        })
+    const errors = validationResult(req);
+    if (errors.isEmpty()) {
+        User.findOne({ userName: userId })
+            .then(result => {
+                console.log(result);
+                if (result != null) {
+                    res.status(400).json({ message: 'User already registered!' });
+                }
+                else {
+                    User.findOneAndUpdate({ emailId: req.session.mailId }, {
+                        userName: userId,
+                        password: password,
+                        confirmPassword: confirmPassword,
+                        wpAlert: wpAlert,
+                        emailAlert: emailAlert
+                    })
+                    res.status(200).json({ message: 'data added sucessfully!' });
+                }
+            })
+    }
+    else {
+        res.status(422).json({ message: errors.array()[0].msg });
+    }
 }

@@ -24,18 +24,23 @@ const userSchema = new mongoose.Schema({
   emailAlert: Boolean,
   accounts: {
     account1: {
+      accountNumber:Number,
       balance: Number
     },
     account2: {
+      accountNumber:Number,
       balance: Number
     },
     account3: {
+      accountNumber:Number,
       balance: Number
     },
     account4: {
+      accountNumber:Number,
       balance: Number
     },
     account5: {
+      accountNumber:Number,
       balance: Number
     },
   },

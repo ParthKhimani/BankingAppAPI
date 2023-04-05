@@ -166,9 +166,18 @@ exports.quickTransfer = (req, res, next) => {
     }
     else {
         const { amount } = req.body;
-        User.findOne({ emailId: req.session.mailId })
+        User.findOne({ emailId: 'abc@gmail.com' })
             .then(result => {
-                console.log(result);
+                let accounts = [result.accounts.account1, result.accounts.account2, result.accounts.account3, result.accounts.account4, result.accounts.account5];
+                let result1;
+                for (let i = 0; i < accounts.length; i++) {
+                    if (accounts[i]["accountNumber"] == `${payFrom}`) {
+                        result1 = accounts[i];
+                        break;
+                    }
+                }
+                console.log(result1);
+                res.status(200).json({ message: 'Money transfer successful!' });
             })
     }
 }

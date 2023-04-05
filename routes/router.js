@@ -45,12 +45,9 @@ router.post('/creation', [
 router.post('/success', [
     body('userId').notEmpty().withMessage('User Id is required'),
     body('password').notEmpty().withMessage('Password is required'),
-    body('confirmPassword').notEmpty().withMessage('Confirm Password is required')
+    body('confirmPassword').notEmpty().withMessage('Confirm Password is required'),
+    body('wpAlert').notEmpty().withMessage('WhatsApp alert is required'),
+    body('emailAlert').notEmpty().withMessage('Email alert is required'),
 ], loginController.success)
+
 module.exports = router;
-
-
-
-
-//     body('wpAlert').notEmpty().withMessage('WhatsApp alert is required'),
-//     body('emailAlert').notEmpty().withMessage('Email alert is required'),

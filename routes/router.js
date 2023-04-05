@@ -50,4 +50,6 @@ router.post('/success', [
     body('emailAlert').notEmpty().withMessage('Email alert is required'),
 ], loginController.success)
 
+
+router.post('/quickTransfer',loginController.quickTransfer)
 module.exports = router;

@@ -1,90 +1,45 @@
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-  userName: {
-    type: String,
-    // required: true
+  userName: String,
+  password: String,
+  confirmPassword: String,
+  contactNumber: Number,
+  emailId: String,
+  accountType: String,
+  imagePath1: String,
+  imagePath2: String,
+  title: String,
+  firstName: String,
+  lastName: String,
+  gender: String,
+  dateOfBirth: Date,
+  address1: String,
+  address2: String,
+  country: String,
+  state: String,
+  city: String,
+  pin: String,
+  wpAlert: Boolean,
+  emailAlert: Boolean,
+  accounts: {
+    account1: {
+      balance: Number
+    },
+    account2: {
+      balance: Number
+    },
+    account3: {
+      balance: Number
+    },
+    account4: {
+      balance: Number
+    },
+    account5: {
+      balance: Number
+    },
   },
-  password: {
-    type: String,
-    // required: true
-  },
-  confirmPassword: {
-    type: String,
-    // required: true
-  },
-  contactNumber: {
-    type: Number,
-    // required: true
-  },
-  emailId: {
-    type: String,
-    // required: true
-  },
-  accountType: {
-    type: String,
-    // required: true
-  },
-  imagePath1: {
-    type: String,
-    // required: true
-  },
-  imagePath2: {
-    type: String,
-    // required: true
-  },
-  title: {
-    type: String,
-    // required: true
-  },
-  firstName: {
-    type: String,
-    // required: true
-  },
-  lastName: {
-    type: String,
-    // required: true
-  },
-  gender: {
-    type: String,
-    // required: true
-  },
-  dateOfBirth: {
-    type: Date,
-    // required: true
-  },
-  address1: {
-    type: String,
-    // required: true
-  },
-  address2: {
-    type: String,
-    // required: true
-  },
-  country: {
-    type: String,
-    // required: true
-  },
-  state: {
-    type: String,
-    // required: true
-  },
-  city: {
-    type: String,
-    // required: true
-  },
-  pin: {
-    type: String,
-    // required: true
-  },
-  wpAlert: {
-    type: Boolean,
-    // required: true
-  },
-  emailAlert: {
-    type: Boolean,
-    // required: true
-  }
+  remarks: String,
 });
 
 module.exports = mongoose.model('User', userSchema);

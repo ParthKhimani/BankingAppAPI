@@ -28,7 +28,7 @@ exports.signIn = (req, res, next) => {
 }
 
 var otpMailed = Math.floor(100000 + Math.random() * 900000).toString();
-console.log(otpMailed);
+console.log('otp mailed: ' + otpMailed);
 
 exports.identification = async (req, res, next) => {
     const { accountType, contactNumber, emailId } = req.body;
@@ -156,5 +156,19 @@ exports.success = (req, res, next) => {
     }
     else {
         res.status(422).json({ message: errors.array()[0].msg });
+    }
+}
+
+exports.quickTransfer = (req, res, next) => {
+    const { payFrom, payTo, remarks } = req.body;
+    if (payFrom == payTo) {
+        res.status(400).json({ message: 'Please select another account!' });
+    }
+    else {
+        const { amount } = req.body;
+        User.findOne({ emailId: req.session.mailId })
+            .then(result => {
+                console.log(result);
+            })
     }
 }

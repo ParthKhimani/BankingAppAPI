@@ -46,13 +46,13 @@ exports.identification = async (req, res, next) => {
         let mailTransporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                user: 'parthkhimani48@gmail.com',
-                pass: 'maatulplnmgqgyio'
+                user: '<emailId>',
+                pass: 'appKey'
             }
         });
 
         let mailDetails = {
-            from: 'parthkhimani48@gmail.com',
+            from: '<emailId>',
             to: emailId,
             subject: 'OTP for verification',
             text: 'Your verification code is: ' + otpMailed

@@ -42,7 +42,7 @@ app.use((req, res, next) => {
     next();
 })
 app.use(cookieParser());
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '10mb' }));
 app.use(router);
 
 mongoose.connect(MONGO_URI)

@@ -166,18 +166,43 @@ exports.quickTransfer = (req, res, next) => {
     }
     else {
         const { amount } = req.body;
-        User.findOne({ emailId: 'abc@gmail.com' })
+        User.findOne({ emailId: "abc@gmail.com" })
             .then(result => {
                 let accounts = [result.accounts.account1, result.accounts.account2, result.accounts.account3, result.accounts.account4, result.accounts.account5];
                 let result1;
+                let result2;
+                let account = "account"
+                var accountFrom;
+                var accountTo;
                 for (let i = 0; i < accounts.length; i++) {
                     if (accounts[i]["accountNumber"] == `${payFrom}`) {
                         result1 = accounts[i];
+                        number = (i + 1).toString();
+                        accountFrom = account.concat(number)
                         break;
                     }
                 }
-                console.log(result1);
-                res.status(200).json({ message: 'Money transfer successful!' });
+                for (let i = 0; i < accounts.length; i++) {
+                    if (accounts[i]["accountNumber"] == `${payTo}`) {
+                        result2 = accounts[i];
+                        number = (i + 1).toString();
+                        accountTo = account.concat(number);
+                        break;
+                    }
+                }
+                var remainingAmount = result1.balance - amount;
+                var amountAfterBalanceAdded = result2.balance + amount;
+                var balance = `accounts.${accountFrom}.balance`;
+                var balance2 = `accounts.${accountTo}.balance`;
+                User.findOneAndUpdate({
+                    emailId: "abc@gmail.com"
+                },
+                    {
+                        [balance]: remainingAmount,
+                        [balance2]: amountAfterBalanceAdded
+                    }
+                )
+                    .then(res.status(200).json({ message: 'Money transfer successful!', remainingAmount: remainingAmount, amountAfterBalanceAdded: amountAfterBalanceAdded }))
             })
     }
 }

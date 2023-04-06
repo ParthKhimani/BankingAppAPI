@@ -72,18 +72,16 @@ exports.identification = async (req, res, next) => {
 }
 
 exports.verification = (req, res, next) => {
-    const { otpEntered } = req.body;
+    const { otpEntered, imagePath1 } = req.body;
     var otpCheck = otpMailed.localeCompare(otpEntered);
     if (otpCheck != 0) {
         res.status(400).json({ message: "otp doesn't matched" });
     }
     else {
-        const { imageData1 } = req.file;
         const errors = validationResult(req);
         if (errors.isEmpty()) {
-            var imageUrl1 = imageData1.path;
             User.findOneAndUpdate({ emailId: req.session.mailId }, {
-                imagePath1: imageUrl1,
+                imagePath1: imagePath1,
             })
             res.status(200).json({ message: 'data added sucessfully!' });
         }
@@ -94,12 +92,11 @@ exports.verification = (req, res, next) => {
 }
 
 exports.verificationSelfieUpload = (req, res, next) => {
-    const { imageData2 } = req.file;
+    const { imagePath2 } = req.body;
     const errors = validationResult(req);
     if (errors.isEmpty()) {
-        var imageUrl2 = imageData2.path;
         User.findOneAndUpdate({ emailId: req.session.mailId }, {
-            imagePath2: imageUrl2,
+            imagePath2: imagePath2,
         })
         res.status(200).json({ message: 'data added sucessfully!' });
     }

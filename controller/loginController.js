@@ -163,7 +163,7 @@ exports.quickTransfer = (req, res, next) => {
     }
     else {
         const { amount } = req.body;
-        User.findOne({ emailId: "abc@gmail.com" })
+        User.findOne({ emailId: req.session.mailId })
             .then(result => {
                 let accounts = [result.accounts.account1, result.accounts.account2, result.accounts.account3, result.accounts.account4, result.accounts.account5];
                 let result1;
@@ -191,12 +191,11 @@ exports.quickTransfer = (req, res, next) => {
                 var amountAfterBalanceAdded = result2.balance + amount;
                 var balance = `accounts.${accountFrom}.balance`;
                 var balance2 = `accounts.${accountTo}.balance`;
-                User.findOneAndUpdate({
-                    emailId: "abc@gmail.com"
-                },
+                User.findOneAndUpdate({ emailId: req.session.mailId },
                     {
                         [balance]: remainingAmount,
-                        [balance2]: amountAfterBalanceAdded
+                        [balance2]: amountAfterBalanceAdded,
+                        remarks: remarks
                     }
                 )
                     .then(res.status(200).json({ message: 'Money transfer successful!', remainingAmount: remainingAmount, amountAfterBalanceAdded: amountAfterBalanceAdded }))
